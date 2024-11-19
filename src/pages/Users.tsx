@@ -13,13 +13,40 @@ interface User {
   avatar?: string;
 }
 
+// Mock data
+const mockUsers: User[] = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+    role: "Admin",
+    status: "active",
+    avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=john"
+  },
+  {
+    id: "2",
+    name: "Jane Smith",
+    email: "jane@example.com",
+    role: "User",
+    status: "active",
+    avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=jane"
+  },
+  {
+    id: "3",
+    name: "Bob Wilson",
+    email: "bob@example.com",
+    role: "Editor",
+    status: "inactive",
+    avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=bob"
+  }
+];
+
 const Users = () => {
   const { data: users, isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
-      const response = await fetch('https://api.socialverseapp.com/admin/dashboard/users');
-      if (!response.ok) throw new Error('Failed to fetch users');
-      return response.json() as Promise<User[]>;
+      // Return mock data instead of making API call
+      return mockUsers;
     },
   });
 
