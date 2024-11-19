@@ -15,13 +15,29 @@ interface AnalyticsData {
   }>;
 }
 
+// Mock data
+const mockAnalytics: AnalyticsData = {
+  views: 15234,
+  shares: 3456,
+  users: 2789,
+  engagement: 67,
+  dailyStats: [
+    { date: '2024-01-01', views: 1200, engagement: 65 },
+    { date: '2024-01-02', views: 1300, engagement: 68 },
+    { date: '2024-01-03', views: 1400, engagement: 70 },
+    { date: '2024-01-04', views: 1250, engagement: 66 },
+    { date: '2024-01-05', views: 1500, engagement: 72 },
+    { date: '2024-01-06', views: 1600, engagement: 75 },
+    { date: '2024-01-07', views: 1450, engagement: 69 },
+  ]
+};
+
 const Analytics = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['analytics'],
     queryFn: async () => {
-      const response = await fetch('https://api.socialverseapp.com/admin/dashboard/analytics');
-      if (!response.ok) throw new Error('Failed to fetch analytics');
-      return response.json() as Promise<AnalyticsData>;
+      // Return mock data instead of making API call
+      return mockAnalytics;
     },
   });
 
