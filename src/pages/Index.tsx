@@ -6,10 +6,9 @@ import RecentUsers from "@/components/RecentUsers";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      
-      <main className="flex-1 p-8">
+      <main className="md:ml-64 p-8 transition-all duration-300">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-2xl font-semibold">Dashboard Overview</h1>

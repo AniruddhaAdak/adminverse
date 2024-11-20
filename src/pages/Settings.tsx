@@ -7,9 +7,9 @@ import Sidebar from "@/components/Sidebar";
 
 const Settings = () => {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8">
+      <main className="md:ml-64 p-8 transition-all duration-300">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 mb-8">
             <SettingsIcon className="h-6 w-6" />

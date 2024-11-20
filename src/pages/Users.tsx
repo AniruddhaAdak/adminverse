@@ -90,9 +90,9 @@ const Users = () => {
   };
 
   if (isLoading) return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8">
+      <main className="md:ml-64 p-8 transition-all duration-300">
         <div className="flex items-center justify-center h-full">
           <RefreshCw className="animate-spin text-primary" size={32} />
         </div>
@@ -101,9 +101,9 @@ const Users = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8">
+      <main className="md:ml-64 p-8 transition-all duration-300">
         <div className="max-w-7xl mx-auto animate-fade-in">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-2xl font-semibold">User Management</h1>
