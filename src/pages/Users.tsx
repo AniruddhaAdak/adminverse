@@ -18,51 +18,63 @@ interface User {
   avatar?: string;
 }
 
+// Mock data as fallback
+const mockUsers: User[] = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+    role: "Admin",
+    status: "active",
+    avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=john"
+  },
+  {
+    id: "2",
+    name: "Jane Smith",
+    email: "jane@example.com",
+    role: "User",
+    status: "active",
+    avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=jane"
+  },
+  {
+    id: "3",
+    name: "Bob Wilson",
+    email: "bob@example.com",
+    role: "Editor",
+    status: "inactive",
+    avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=bob"
+  }
+];
+
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
 
+  // Using JSONPlaceholder as a reliable test API
   const { data: users, isLoading, error, refetch } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       try {
-        const response = await fetch('https://api.socialverseapp.com/admin/dashboard/users');
+        // Using JSONPlaceholder as a reliable test API
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
         if (!response.ok) throw new Error('Failed to fetch users');
-        return response.json();
+        
+        const data = await response.json();
+        // Transform the JSONPlaceholder data to match our User interface
+        return data.map((user: any) => ({
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+          role: user.company?.name ? "Admin" : "User",
+          status: "active",
+          avatar: `https://api.dicebear.com/7.x/avatars/svg?seed=${user.username}`
+        }));
       } catch (error) {
-        // Fallback to mock data if API fails
         console.warn('Using mock data due to API error:', error);
         return mockUsers;
       }
     },
   });
-
-  const mockUsers: User[] = [
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Admin",
-      status: "active",
-      avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=john"
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "User",
-      status: "active",
-      avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=jane"
-    },
-    {
-      id: "3",
-      name: "Bob Wilson",
-      email: "bob@example.com",
-      role: "Editor",
-      status: "inactive",
-      avatar: "https://api.dicebear.com/7.x/avatars/svg?seed=bob"
-    }
-  ];
 
   const filteredUsers = users?.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
