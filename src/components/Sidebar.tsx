@@ -1,11 +1,14 @@
-import { LayoutDashboard, Users, BarChart2, Settings, Menu, X } from "lucide-react";
+import { LayoutDashboard, Users, BarChart2, Settings, Menu, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Button } from "@/components/ui/button";
 
 const Sidebar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   
   const links = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -29,7 +32,7 @@ const Sidebar = () => {
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Overlay */}
+      {/* Overlay for mobile */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
@@ -37,44 +40,70 @@ const Sidebar = () => {
         />
       )}
 
-      {/* Sidebar */}
-      <div className={cn(
-        "fixed top-0 left-0 h-full bg-white border-r border-gray-200 p-4 z-40 transition-transform duration-300 ease-in-out",
-        "w-64",
-        isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-      )}>
-        <div className="flex items-center gap-2 px-2 mb-8">
-          <div className="w-8 h-8 rounded-full bg-primary animate-pulse"></div>
-          <span className="font-semibold text-lg">SocialVerse</span>
-        </div>
-        
-        <nav className="space-y-1">
-          {links.map((link) => {
-            const Icon = link.icon;
-            const isActive = location.pathname === link.path;
-            
-            return (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200",
-                  "hover:scale-105",
-                  isActive 
-                    ? "bg-primary text-white shadow-lg" 
-                    : "text-gray-600 hover:bg-gray-100"
-                )}
+      {/* Resizable Sidebar */}
+      <ResizablePanelGroup direction="horizontal" className="min-h-screen">
+        <div className={cn(
+          "fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out",
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+          isCollapsed ? "w-16" : "w-64"
+        )}>
+          <ResizablePanel 
+            defaultSize={20} 
+            minSize={10} 
+            maxSize={30}
+            className="bg-white border-r border-gray-200 h-full"
+          >
+            <div className="flex flex-col h-full">
+              {/* Sidebar Header */}
+              <div className={cn(
+                "flex items-center gap-2 p-4 mb-4",
+                isCollapsed ? "justify-center" : "px-2"
+              )}>
+                <div className="w-8 h-8 rounded-full bg-primary animate-pulse"></div>
+                {!isCollapsed && <span className="font-semibold text-lg">SocialVerse</span>}
+              </div>
+              
+              {/* Navigation Links */}
+              <nav className="space-y-1 px-2 flex-1">
+                {links.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = location.pathname === link.path;
+                  
+                  return (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200",
+                        "hover:scale-105",
+                        isActive 
+                          ? "bg-primary text-white shadow-lg" 
+                          : "text-gray-600 hover:bg-gray-100"
+                      )}
+                    >
+                      <Icon size={20} className={cn(
+                        "transition-transform duration-200",
+                        isActive && "rotate-12"
+                      )} />
+                      {!isCollapsed && <span>{link.label}</span>}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* Collapse Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="m-2"
+                onClick={() => setIsCollapsed(!isCollapsed)}
               >
-                <Icon size={20} className={cn(
-                  "transition-transform duration-200",
-                  isActive && "rotate-12"
-                )} />
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
+                {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+              </Button>
+            </div>
+          </ResizablePanel>
+        </div>
+      </ResizablePanelGroup>
     </>
   );
 };
